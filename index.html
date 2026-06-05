@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>R&D Project Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">RD</div>
+          <div>
+            <div class="brand-title">R&D Dashboard</div>
+            <div class="brand-subtitle">Excel source of truth</div>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Dashboard sections">
+          <button class="nav-item active" data-view="executive">Executive</button>
+          <button class="nav-item" data-view="tracker">Project Tracker</button>
+          <button class="nav-item" data-view="blockers">Blockers</button>
+          <button class="nav-item" data-view="deadlines">Deadlines</button>
+          <button class="nav-item" data-view="summary">Summary</button>
+        </nav>
+        <div class="source-box">
+          <div class="source-label">Last refresh</div>
+          <div id="lastRefresh" class="source-value">Loading</div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <h1 id="viewTitle">Executive Dashboard</h1>
+            <p id="viewSubtitle">Project health, blockers, risks, and library progress.</p>
+          </div>
+          <div class="actions">
+            <input id="searchInput" class="search" type="search" placeholder="Search project, owner, update..." />
+            <button id="refreshBtn" class="primary-btn">Refresh Excel</button>
+          </div>
+        </header>
+
+        <section class="filters">
+          <select id="statusFilter">
+            <option value="">All statuses</option>
+          </select>
+          <select id="riskFilter">
+            <option value="">All risks</option>
+          </select>
+          <select id="ownerFilter">
+            <option value="">All owners</option>
+          </select>
+        </section>
+
+        <section id="content" class="content" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <dialog id="detailDialog" class="detail-dialog">
+      <div class="dialog-head">
+        <h2 id="dialogTitle">Details</h2>
+        <button id="closeDialog" class="icon-btn" aria-label="Close details">x</button>
+      </div>
+      <div id="dialogBody" class="dialog-body"></div>
+    </dialog>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
