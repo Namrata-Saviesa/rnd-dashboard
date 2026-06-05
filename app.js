@@ -134,16 +134,8 @@ function render() {
 function renderExecutive() {
   const rows = updates();
   const blockers = activeBlockers();
-  const risks = highRisks();
-  const delayed = delayedItems();
   const decisions = rows.filter((row) => normalize(row["Decision Needed"]) === "Yes");
   els.content.innerHTML = `
-    <div class="kpi-grid">
-      ${kpi("Total Updates", rows.length, "Visible after current filters")}
-      ${kpi("Open Blockers", blockers.length, "Non-completed blocker items")}
-      ${kpi("High Risks", risks.length, "Needs management attention")}
-      ${kpi("Delayed", delayed.length, "Timeline pressure")}
-    </div>
     <div class="pie-grid">${renderLibraryPies()}</div>
     <div class="grid-two">
       ${tablePanel("Critical Blockers", blockers.slice(0, 8), ["Project", "Owner", "Risk", "Next Action"])}
