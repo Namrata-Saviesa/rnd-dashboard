@@ -77,7 +77,16 @@ function libraryStats() {
 }
 
 function activeBlockers() {
-  return updates().filter((row) => normalize(row["Blocker Type"]) && normalize(row["Blocker Type"]) !== "None" && normalize(row.Status) !== "Completed");
+  return sheet("Blockers")
+    .filter((row) => normalize(row.Project) && normalize(row.Project) !== "How to use")
+    .filter((row) => {
+      const searchBlob = Object.values(row).join(" ").toLowerCase();
+      if (state.search && !searchBlob.includes(state.search.toLowerCase())) return false;
+      if (state.status && normalize(row.Status) !== state.status) return false;
+      if (state.risk && normalize(row.Risk) !== state.risk) return false;
+      if (state.owner && !normalize(row.Owner).includes(state.owner)) return false;
+      return true;
+    });
 }
 
 function highRisks() {
@@ -136,7 +145,7 @@ function renderExecutive() {
   const blockers = activeBlockers();
   const decisions = rows.filter((row) => normalize(row["Decision Needed"]) === "Yes");
   els.content.innerHTML = `
-    <div class="pie-grid">${renderLibraryPies()}</div>
+    <div class="pie-grid">${renderLibraryPies()}${renderShutterPie()}</div>
     <div class="grid-two">
       ${tablePanel("Critical Blockers", blockers.slice(0, 8), ["Project", "Owner", "Risk", "Next Action"])}
       ${tablePanel("Decisions Needed", decisions.slice(0, 8), ["Project", "Owner", "Risk", "Next Action"])}
@@ -162,6 +171,18 @@ function renderLibraryPies() {
       </div>`;
     })
     .join("");
+}
+
+function renderShutterPie() {
+  const total = 28;
+  const created = 2;
+  const pending = total - created;
+  const pct = Math.round((created / total) * 100);
+  return `<div class="pie-card">
+    <div class="pie-title">Shutters</div>
+    <div class="pie" style="--pct:${pct}%"></div>
+    <div class="pie-caption">${created} created / ${pending} pending</div>
+  </div>`;
 }
 
 function renderTracker() {
