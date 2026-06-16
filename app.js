@@ -274,7 +274,9 @@ async function loadData(refresh = false) {
     render();
   } catch (error) {
     try {
-      const staticRes = await fetch(`./tracker-cache.json?v=${encodeURIComponent(cacheVersion)}`);
+      const staticRes = await fetch(`./tracker-cache.json?v=${encodeURIComponent(cacheVersion)}&ts=${Date.now()}`, {
+        cache: "no-store",
+      });
       if (!staticRes.ok) throw new Error("Static tracker snapshot unavailable");
       const data = await staticRes.json();
       state.data = data;
