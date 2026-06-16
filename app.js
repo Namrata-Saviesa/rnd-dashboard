@@ -13,6 +13,8 @@ if (executiveOnly) {
   document.body.classList.add("executive-only");
 }
 
+const cacheVersion = new URLSearchParams(location.search).get("v") || Date.now().toString();
+
 const viewMeta = {
   executive: ["Executive Dashboard", "Project health, blockers, risks, and library progress."],
   tracker: ["Project Tracker", "Reduced project update view with drill-down details."],
@@ -272,7 +274,7 @@ async function loadData(refresh = false) {
     render();
   } catch (error) {
     try {
-      const staticRes = await fetch("./tracker-cache.json");
+      const staticRes = await fetch(`./tracker-cache.json?v=${encodeURIComponent(cacheVersion)}`);
       if (!staticRes.ok) throw new Error("Static tracker snapshot unavailable");
       const data = await staticRes.json();
       state.data = data;
